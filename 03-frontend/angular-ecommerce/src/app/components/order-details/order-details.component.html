@@ -1,0 +1,45 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <div *ngIf="orderHistory">
+        <h4 class="mt-3">Order Items</h4>
+        <div *ngIf="orderHistory.orderItems?.length > 0">
+          <table class="table table-bordered">
+            <tr>
+              <th width="20%">Image</th>
+              <th width="10%">Product Name</th>
+              <th width="10%">Unit Price</th>
+              <th width="10%">Quantity</th>
+            </tr>
+            <tr *ngFor="let orderItem of orderHistory.orderItems">
+              <td>
+                <a [routerLink]="['/products', orderItem.productId]">
+                  <img
+                    [src]="orderItem.imageUrl"
+                    alt="{{ orderItem.productId }}"
+                    class="img-thumbnail"
+                  />
+                </a>
+              </td>
+              <td>{{ orderItem.productId }}</td>
+              <td>{{ orderItem.unitPrice | currency }}</td>
+              <td>{{ orderItem.quantity }}</td>
+            </tr>
+          </table>
+        </div>
+        <div
+          class="alert alert-warning"
+          role="alert"
+          *ngIf="!orderHistory.orderItems?.length"
+        >
+          No order items found for this order.
+        </div>
+      </div>
+      <div *ngIf="!orderHistory">
+        <p>Order details not available.</p>
+      </div>
+      <br />
+      <button class="btn btn-primary" (click)="goBack()">Back to Orders</button>
+    </div>
+  </div>
+</div>

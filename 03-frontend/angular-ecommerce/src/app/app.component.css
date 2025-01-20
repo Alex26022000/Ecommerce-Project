@@ -1,0 +1,47 @@
+/* Stiluri pentru page-wrapper */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Face ca wrapper-ul să ocupe întreaga înălțime a ecranului */
+}
+
+/* Stiluri pentru page-container */
+.page-container {
+    flex: 1;
+    /* Face ca page-container să se extindă pe întreaga înălțime disponibilă */
+}
+
+/* Stiluri pentru footer */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: auto;
+    /* Face ca footer-ul să fie poziționat la sfârșitul containerului */
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+footer ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Stiluri pentru informații adiționale din footer */
+.footer-info {
+    margin-top: 20px;
+}
