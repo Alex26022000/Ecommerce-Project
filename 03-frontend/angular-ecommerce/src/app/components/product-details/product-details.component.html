@@ -2,16 +2,50 @@
   <div class="container-fluid">
     <img src="{{ product.imageUrl }}" class="detail-img" />
 
-    <h3>{{ product.name }}</h3>
-    <div class="price">{{ product.unitPrice | currency : "USD" }}</div>
-    <button (click)="addToCart()" class="btn btn-primary btn-sm">
-      Add to cart
-    </button>
+    <h3>
+      <input [(ngModel)]="product.name" class="form-control" [readOnly]="!isEdit" />
+    </h3>
+
+    <div class="price">
+      <input
+        [(ngModel)]="product.unitPrice"
+        class="form-control"
+        type="number"
+        placeholder="Price"
+        [readOnly]="!isEdit"
+      />
+    </div>
+    <div class="price">
+      <h3>
+        <select
+          [(ngModel)]="product?.category.id"
+          class="form-control"
+          [disabled]="!isEdit"
+        >
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.categoryName }}
+          </option>
+        </select>
+      </h3>
+    </div>
+    <button
+    class="btn btn-primary btn-sm"
+    (click)="addToCart(product)"
+  >
+    Add to Cart
+  </button>
 
     <hr />
     <h4>Description</h4>
-    <p>{{ product.description }}</p>
+    <textarea [(ngModel)]="product.description" class="form-control" [readOnly]="!isEdit"></textarea>
 
-    <a routerLink="/products" class="mt-5">Back to Product List</a>
+    <div *ngIf="!isEdit" class="mt-3">
+      <button (click)="toggleEdit()" class="btn btn-primary">Edit</button>
+    </div>
+    <a routerLink="/products" class="back-link">Back to product list</a>
+    <div *ngIf="isEdit" class="mt-3">
+      <button (click)="updateProduct()" class="btn btn-success">Save</button>
+      <button (click)="cancelEdit()" class="btn btn-danger">Cancel</button>
+    </div>
   </div>
 </div>

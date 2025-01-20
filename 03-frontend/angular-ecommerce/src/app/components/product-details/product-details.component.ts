@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/common/product';
 import { ProductService } from 'src/app/services/product.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Product } from 'src/app/common/product';
+import { ProductCategory } from 'src/app/common/product-category';
 import { CartService } from 'src/app/services/cart.service';
 import { CartItem } from 'src/app/common/cart-item';
 
@@ -12,33 +13,74 @@ import { CartItem } from 'src/app/common/cart-item';
 })
 export class ProductDetailsComponent implements OnInit {
   product: Product = new Product();
+  categories: ProductCategory[] = [];
+  isEdit: boolean = false;
+  originalProduct: Product = new Product();
 
   constructor(
     private productService: ProductService,
+    private route: ActivatedRoute,
     private cartService: CartService,
-    private route: ActivatedRoute
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(() => {
       this.handleProductDetails();
     });
+    this.loadCategories();
+  }
+
+  loadCategories() {
+    this.productService.getProductCategories().subscribe((data) => {
+      this.categories = data;
+    });
   }
 
   handleProductDetails() {
-    // get the "id" param string. convert string to a number using the "+" symbol
     const theProductId: number = +this.route.snapshot.paramMap.get('id')!;
 
     this.productService.getProduct(theProductId).subscribe((data) => {
       this.product = data;
+      this.originalProduct = { ...data };
     });
   }
 
-  addToCart() {
-    console.log(
-      `Adding to cart: ${this.product.name}, ${this.product.unitPrice}`
+  deleteProduct() {
+    this.productService.deleteProduct(this.product.id).subscribe(
+      () => {
+        console.log("Product deleted successfully.");
+        this.router.navigate(['/products']);
+      },
+      (error) => console.error('Error deleting product:', error)
     );
-    const theCartItem = new CartItem(this.product);
+  }
+
+  updateProduct() {
+    this.productService.updateProduct(this.product.id, this.product).subscribe(
+      () => {
+        console.log("Product updated successfully.");
+        this.isEdit = false;
+      },
+      (error) => console.error('Error updating product:', error)
+    );
+  }
+
+  toggleEdit() {
+    this.isEdit = true;
+  }
+
+  cancelEdit() {
+    this.product = { ...this.originalProduct };
+    this.isEdit = false;
+  }
+
+  addToCart(theProduct: Product) {
+
+    console.log(`Adding to cart: ${theProduct.name}, ${theProduct.unitPrice}`);
+
+    const theCartItem = new CartItem(theProduct);
+
     this.cartService.addToCart(theCartItem);
   }
 }

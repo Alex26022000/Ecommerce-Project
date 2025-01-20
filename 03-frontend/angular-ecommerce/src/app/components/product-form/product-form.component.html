@@ -1,0 +1,49 @@
+<br>
+<br><br>
+<br>
+<div class="container">
+  <h2 *ngIf="!editMode">Add New Product</h2>
+  <h2 *ngIf="editMode">Edit Product</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" [(ngModel)]="product.name" name="name" required class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="name">Sku</label>
+      <input type="text" id="name" [(ngModel)]="product.sku" name="sku" required class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" [(ngModel)]="product.description" name="description" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select id="category" [(ngModel)]="product.category" name="category" class="form-control" required>
+        <option *ngFor="let category of categories" [ngValue]="category">{{ category.categoryName }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="unitPrice">Price</label>
+      <input type="number" id="unitPrice" [(ngModel)]="product.unitPrice" name="unitPrice" required
+        class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="imageUrl">Image URL</label>
+      <input type="text" id="imageUrl" [(ngModel)]="product.imageUrl" name="imageUrl" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="unitsInStock">Units in Stock</label>
+      <input type="number" id="unitsInStock" [(ngModel)]="product.unitsInStock" name="unitsInStock" required
+        class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ editMode ? 'Update' : 'Add' }} Product</button>
+  </form>
+</div>

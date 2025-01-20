@@ -1,4 +1,133 @@
-<!-- Container to inject the Okta Sign-In Widget -->
-<div class="pt-5">
-  <div id="okta-sign-in-widget" class="pt-5"></div>
-</div>
+<br><br><br><br><br><br><br><br><br><br>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 20px;
+            }
+
+            .login-container h2 {
+                font-size: 24px;
+            }
+
+            button[type="submit"] {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form (ngSubmit)="onLogin()">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" [(ngModel)]="email" name="email" required class="form-control" />
+          </div>
+      
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" [(ngModel)]="password" name="password" required class="form-control" />
+          </div>
+      
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
+</body>
+
+</html>

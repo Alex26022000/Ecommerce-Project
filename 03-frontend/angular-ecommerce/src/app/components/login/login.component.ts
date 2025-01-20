@@ -1,50 +1,36 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { OKTA_AUTH } from '@okta/okta-angular';
-import { OktaAuth } from '@okta/okta-auth-js';
-import OktaSignIn from '@okta/okta-signin-widget';
-
-import myAppConfig from '../../config/my-app-config';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
-  oktaSignin: any;
 
-  constructor(@Inject(OKTA_AUTH) private oktaAuth: OktaAuth) {
-    this.oktaSignin = new OktaSignIn({
-      logo: 'assets/images/logo.png',
-      baseUrl: myAppConfig.oidc.issuer.split('/oauth2')[0],
-      clientId: myAppConfig.oidc.clientId,
-      redirectUri: myAppConfig.oidc.redirectUri,
-      authParams: {
-        pkce: true,
-        issuer: myAppConfig.oidc.issuer,
-        scopes: myAppConfig.oidc.scopes,
-      },
-    });
-  }
 
-  ngOnInit(): void {
-    this.oktaSignin.remove();
+export class LoginComponent {
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
 
-    this.oktaSignin.renderEl(
-      {
-        el: '#okta-sign-in-widget',
-      }, // this name should be same as div tag id in login.component.html
-      (response: any) => {
-        if (response.status === 'SUCCESS') {
-          console.error('SUCCES');
-          this.oktaAuth.signInWithRedirect();
+  constructor(private authService: AuthService, private router: Router) { }
+
+  onLogin() {
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        console.log(response);
+        if (response && response.message === 'Login successful!') {
+          this.authService.setUserEmail(this.email);  
+          this.router.navigate(['/products']);
+        } else {
+          this.errorMessage = 'Invalid credentials';
         }
       },
-      (error: any) => {
-        // Log detailed error information for troubleshooting
-        console.error('Error rendering Okta SignIn Widget:', error);
-        throw error;
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'An error occurred during login';
       }
-    );
+    });
   }
 }
